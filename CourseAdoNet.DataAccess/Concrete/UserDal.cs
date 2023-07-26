@@ -1,4 +1,4 @@
-﻿using CourseAdoNet.DataAccess.Abstract;
+using CourseAdoNet.DataAccess.Abstract;
 using CourseAdoNet.DataAccess.Constants;
 using CourseAdoNet.Entities.Concrete;
 using System;
@@ -25,12 +25,24 @@ namespace CourseAdoNet.DataAccess.Concrete
 
         public void Delete(int id)
         {
-            throw new System.NotImplementedException();
+            string DeleteQuery = "DELETE FROM Users WHERE Id=@Id";
+
+            using SqlConnection connection = new SqlConnection(ConnectionStrings.CourseConnectionString);
+            using SqlCommand command = new SqlCommand(DeleteQuery, connection);
+            connection.Open();
+            using SqlDataReader reader = command.ExecuteReader();
         }
 
         public User Get(int id)
         {
-            throw new System.NotImplementedException();
+            User user = new User();  //sehvdi
+            string AddQuery = "Select * FROM Users WHERE Id=@Id";
+
+            using SqlConnection connection = new SqlConnection(ConnectionStrings.CourseConnectionString);
+            using SqlCommand command = new SqlCommand(AddQuery, connection);
+            connection.Open();
+            using SqlDataReader reader = command.ExecuteReader();
+            return user;    //sehvdi
         }
 
         public List<User> GetAll()
@@ -52,7 +64,14 @@ namespace CourseAdoNet.DataAccess.Concrete
 
         public void Update(User user)
         {
-            throw new System.NotImplementedException();
+            string UpdateQuery = "UPDATE Users SET Name = NewName, Surname = NewSurname, WHERE User=@user";
+
+            using SqlConnection connection = new SqlConnection(ConnectionStrings.CourseConnectionString);
+            using SqlCommand command = new SqlCommand(UpdateQuery, connection);
+            connection.Open();
+            using SqlDataReader reader = command.ExecuteReader();
         }
+
+        
     }
 }
