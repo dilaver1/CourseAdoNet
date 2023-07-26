@@ -12,7 +12,6 @@ namespace CourseAdoNet.DataAccess.Concrete
         public void Add(User user)
         {
             //SQL Injection
-
             string queryString = $"INSERT INTO Users VALUES(@UserName,@Email)";
 
             using SqlConnection connection = new SqlConnection(ConnectionStrings.CourseConnectionString);
@@ -29,20 +28,24 @@ namespace CourseAdoNet.DataAccess.Concrete
 
             using SqlConnection connection = new SqlConnection(ConnectionStrings.CourseConnectionString);
             using SqlCommand command = new SqlCommand(DeleteQuery, connection);
+            command.Parameters.AddWithValue("@Id", id);
             connection.Open();
-            using SqlDataReader reader = command.ExecuteReader();
+            command.ExecuteNonQuery();
         }
 
         public User Get(int id)
         {
-            User user = new User();  //sehvdi
-            string AddQuery = "Select * FROM Users WHERE Id=@Id";
+            string queryString = "SELECT * FROM Users WHERE Id=@Id";
 
             using SqlConnection connection = new SqlConnection(ConnectionStrings.CourseConnectionString);
-            using SqlCommand command = new SqlCommand(AddQuery, connection);
+            using SqlCommand command = new SqlCommand(queryString, connection);
+            command.Parameters.AddWithValue("@Id", id);
             connection.Open();
             using SqlDataReader reader = command.ExecuteReader();
-            return user;    //sehvdi
+            reader.Read();
+            User user = new User(Convert.ToInt32(reader["Id"]), reader["UserName"].ToString(), reader["Email"].ToString());
+
+            return user;
         }
 
         public List<User> GetAll()
@@ -64,14 +67,15 @@ namespace CourseAdoNet.DataAccess.Concrete
 
         public void Update(User user)
         {
-            string UpdateQuery = "UPDATE Users SET Name = NewName, Surname = NewSurname, WHERE User=@user";
+            string queryString = $"UPDATE Users SET UserName = @UserName, Email = @Email WHERE Id = @Id";
 
             using SqlConnection connection = new SqlConnection(ConnectionStrings.CourseConnectionString);
-            using SqlCommand command = new SqlCommand(UpdateQuery, connection);
+            using SqlCommand command = new SqlCommand(queryString, connection);
+            command.Parameters.AddWithValue("@Id", user.Id);
+            command.Parameters.AddWithValue("@UserName", user.UserName);
+            command.Parameters.AddWithValue("@Email", user.Email);
             connection.Open();
-            using SqlDataReader reader = command.ExecuteReader();
+            command.ExecuteNonQuery();
         }
-
-
     }
 }

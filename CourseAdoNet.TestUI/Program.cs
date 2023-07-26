@@ -2,13 +2,8 @@
 using CourseAdoNet.Entities.Concrete;
 
 
-var newUser = new User(0,"test2","test2@test.com");
-
 UserDal userDal = new UserDal();
-userDal.Add(newUser);
 
+var user = userDal.Get(4);
 
-var users = userDal.GetAll();
-
-foreach (var user in users)
-    Console.WriteLine(user.UserName);
+Console.WriteLine(user.UserName);

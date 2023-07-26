@@ -5,4 +5,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CourseAdoNet.DataAccess\CourseAdoNet.DataAccess.csproj" />
+    <ProjectReference Include="..\CourseAdoNet.Entities\CourseAdoNet.Entities.csproj" />
+  </ItemGroup>
+
 </Project>
