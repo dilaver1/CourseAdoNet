@@ -14,5 +14,7 @@ namespace CourseAdoNet.Business.Abstract
         public void Update(User user);
 
         public void Delete(int id);
+
     }
+    
 }
