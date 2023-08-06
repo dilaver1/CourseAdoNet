@@ -11,10 +11,11 @@ namespace CourseAdoNet.DataAccess.Concrete
     {
         public void Add(World world)
         {
-            string queryString = $"INSERT INTO Worlds VALUES(@Name)";
+            string queryString = $"INSERT INTO Worlds VALUES(@Name,@OwnerId)";
             using SqlConnection connection = new SqlConnection(ConnectionStrings.CourseConnectionString);
             using SqlCommand command = new SqlCommand(queryString, connection);
             command.Parameters.AddWithValue("@Name", world.Name);
+            command.Parameters.AddWithValue("@OwnerId", world.OwnerId);
             connection.Open();
             command.ExecuteNonQuery();
         }
@@ -30,7 +31,7 @@ namespace CourseAdoNet.DataAccess.Concrete
             command.ExecuteNonQuery();
         }
 
-        public World GetByUserId(int ownerId)
+        public List<World> GetByUserId(int ownerId)
         {
             string queryString = "SELECT * FROM Worlds WHERE OwnerId=@OwnerId";
 
@@ -39,12 +40,17 @@ namespace CourseAdoNet.DataAccess.Concrete
             command.Parameters.AddWithValue("@OwnerId", ownerId);
             connection.Open();
             using SqlDataReader reader = command.ExecuteReader();
-            reader.Read();
-            World world = new World(Convert.ToInt32(reader["Id"]), reader["Name"].ToString());
 
-            return world;
+            List<World> worlds = new List<World>();
+
+            while (reader.Read())
+            {
+                World world = new World(Convert.ToInt32(reader["Id"]), reader["Name"].ToString(), ownerId);
+                worlds.Add(world);
+            }
+
+            return worlds;
         }
-
 
         public void Update(World world)
         {

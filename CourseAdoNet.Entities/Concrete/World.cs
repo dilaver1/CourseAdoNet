@@ -7,10 +7,11 @@
         public int OwnerId { get; set; }
 
 
-        public World(int id, string name)
+        public World(int id, string name,int ownerId)
         {
             Id = id;
             Name = name;
+            OwnerId = ownerId;
         }
     }
 }

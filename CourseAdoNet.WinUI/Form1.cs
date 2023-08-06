@@ -19,21 +19,20 @@ namespace CourseAdoNet.WinUI
         private void Form1_Load(object sender, EventArgs e)
         {
             LoadUsers();
-            LoadWorlds();
         }
 
         private void LoadUsers()
         {
             var users = _userManager.GetAll();
             dgwUsers.DataSource = users;
-            
+
         }
+
         private void LoadWorlds()
         {
             var worlds = _worldManager.GetByUserId(Convert.ToInt32(dgwUsers.SelectedRows[0].Cells[0].Value));
             dgwWorlds.DataSource = worlds;
         }
-
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
@@ -41,7 +40,6 @@ namespace CourseAdoNet.WinUI
             _userManager.Add(newUser);
 
             LoadUsers();
-            LoadWorlds();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -52,9 +50,8 @@ namespace CourseAdoNet.WinUI
                 _userManager.Delete(selectedUserId);
 
                 LoadUsers();
-                LoadWorlds();
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("Please select row");
             }
@@ -62,16 +59,15 @@ namespace CourseAdoNet.WinUI
 
         private void dgwUsers_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgwUsers.SelectedRows.Count!=0)
+            if (dgwUsers.SelectedRows.Count != 0)
             {
                 var selectedUserName = dgwUsers.SelectedRows[0].Cells[1].Value.ToString();
                 txtUpdateUserName.Text = selectedUserName;
                 var selectedEmail = dgwUsers.SelectedRows[0].Cells[2].Value.ToString();
                 txtUpdateEmail.Text = selectedEmail;
+
+                LoadWorlds();
             }
-            
-            
-            
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -80,9 +76,47 @@ namespace CourseAdoNet.WinUI
             _userManager.Update(updateUser);
 
             LoadUsers();
+        }
+
+        private void btnRemoveWorld_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var selectedUserId = Convert.ToInt32(dgwWorlds.SelectedRows[0].Cells[0].Value);
+                _worldManager.Delete(selectedUserId);
+
+                LoadWorlds();
+            }
+            catch
+            {
+                MessageBox.Show("Please select row");
+            }
+        }
+
+        private void btnUpdateWorld_Click(object sender, EventArgs e)
+        {
+            var updatedWorld = new World(Convert.ToInt32(dgwWorlds.SelectedRows[0].Cells[0].Value), txtUpdateWorldName.Text, Convert.ToInt32(dgwUsers.SelectedRows[0].Cells[0].Value));
+
+            _worldManager.Update(updatedWorld);
+
             LoadWorlds();
         }
 
+        private void btnAddWorld_Click(object sender, EventArgs e)
+        {
+            var newWorld = new World(0, txtWorldName.Text, Convert.ToInt32(dgwUsers.SelectedRows[0].Cells[0].Value));
+            _worldManager.Add(newWorld);
 
+            LoadWorlds();
+        }
+
+        private void dgwWorlds_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgwWorlds.SelectedRows.Count != 0)
+            {
+                var selectedWorldName = dgwWorlds.SelectedRows[0].Cells[1].Value.ToString();
+                txtUpdateWorldName.Text = selectedWorldName;
+            }
+        }
     }
 }

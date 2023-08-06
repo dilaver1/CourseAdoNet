@@ -5,7 +5,7 @@ namespace CourseAdoNet.DataAccess.Abstract
 {
     public interface IWorldDal
     {
-        World GetByUserId(int id);
+        List<World> GetByUserId(int id);
         void Add(World world);
         void Update(World world);
         void Delete(int id);

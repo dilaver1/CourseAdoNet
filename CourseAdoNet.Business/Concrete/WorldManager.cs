@@ -2,10 +2,7 @@
 using CourseAdoNet.Business.Exceptions;
 using CourseAdoNet.DataAccess.Abstract;
 using CourseAdoNet.Entities.Concrete;
-using System;
 using System.Collections.Generic;
-using System.Text;
-
 
 namespace CourseAdoNet.Business.Concrete
 {
@@ -34,7 +31,7 @@ namespace CourseAdoNet.Business.Concrete
         }
 
 
-        public World GetByUserId(int id)
+        public List<World> GetByUserId(int id)
         {
             return _worldDal.GetByUserId(id);
         }
